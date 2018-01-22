@@ -1,6 +1,5 @@
 package com.sistonic.messenger;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
@@ -44,10 +43,5 @@ public class SendSMSActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void goToInbox(View view) {
-        Intent intent = new Intent(SendSMSActivity.this, MainActivity.class);
-        startActivity(intent);
     }
 }

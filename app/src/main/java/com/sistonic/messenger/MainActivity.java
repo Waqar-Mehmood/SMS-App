@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,8 +21,11 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     public static MainActivity inst;
+
     private ArrayList<String> SmsMessageList = new ArrayList<>();
+
     private ListView smsListView;
+
     private ArrayAdapter arrayAdapter;
 
     public static MainActivity Instance() {
@@ -34,10 +36,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab_new_sms);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,6 +49,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+        smsListView = findViewById(R.id.lv_messages);
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, SmsMessageList);
+        smsListView.setAdapter(arrayAdapter);
+        smsListView.setOnItemClickListener(this);
+
+        SmsInbox();
     }
 
     @Override
@@ -57,12 +63,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         inst = this;
     }
 
-    public void refreshSmsInbox() {
+    public void SmsInbox() {
         ContentResolver contentResolver = getContentResolver();
         Cursor smsInboxCursor = contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
 
         int indexBody = smsInboxCursor.getColumnIndex("body");
-        int indexAdress = smsInboxCursor.getColumnIndex("address");
+        int indexAddress = smsInboxCursor.getColumnIndex("address");
         int timeMills = smsInboxCursor.getColumnIndex("date");
 
         Date date = new Date(timeMills);
@@ -73,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         arrayAdapter.clear();
         do {
-            String str = smsInboxCursor.getString(indexAdress) + "\n" +
+            String str = smsInboxCursor.getString(indexAddress) + "\n" +
                     smsInboxCursor.getString(indexBody) + "\t" + dateText + "\n";
             arrayAdapter.add(str);
         } while (smsInboxCursor.moveToNext());
