@@ -1,4 +1,4 @@
-package com.sistonic.messenger;
+package com.sistonic.messenger.utilities;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,12 +8,10 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 
+import com.sistonic.messenger.MainActivity;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-/**
- * Created by Pak-Pc on 10/20/2017.
- */
 
 public class SmsBroadCastReceiver extends BroadcastReceiver {
 

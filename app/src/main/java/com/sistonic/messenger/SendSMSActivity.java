@@ -19,9 +19,9 @@ public class SendSMSActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_sms);
 
-        sendSmsButton = findViewById(R.id.btnSendSMS);
-        phoneNumber = findViewById(R.id.editTextPhoneNum);
-        smsMessageEt = findViewById(R.id.editTextSMS);
+        sendSmsButton = findViewById(R.id.btn_send_sms);
+        phoneNumber = findViewById(R.id.et_phone_number);
+        smsMessageEt = findViewById(R.id.et_sms);
 
         sendSmsButton.setOnClickListener(new View.OnClickListener() {
             @Override

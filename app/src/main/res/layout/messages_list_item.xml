@@ -2,34 +2,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_sender_phone_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="+923425297771" />
-
-    <RelativeLayout
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="3dp"
+        card_view:cardBackgroundColor="#FFF"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardPreventCornerOverlap="true"
+        card_view:cardUseCompatPadding="true"
+        card_view:contentPadding="5dp">
 
-        <TextView
-            android:id="@+id/tv_message"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Hello World!" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            tools:text="21-Jan" />
+            <TextView
+                android:id="@+id/tv_sender_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="+923425297771" />
 
-    </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8.5"
+                    android:fontFamily="sans-serif"
+                    android:maxLines="1"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    tools:text="Hello World!" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:fontFamily="sans-serif"
+                    android:gravity="end"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    tools:text="00-00" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

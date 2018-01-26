@@ -1,32 +1,30 @@
 package com.sistonic.messenger;
 
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+
+import com.sistonic.messenger.data.Inbox;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class MainActivity extends AppCompatActivity {
 
     public static MainActivity inst;
 
-    private ArrayList<String> SmsMessageList = new ArrayList<>();
+    private SmsAdapter mAdapter;
 
-    private ListView smsListView;
+    private RecyclerView mMessagesRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
 
-    private ArrayAdapter arrayAdapter;
+    private static final int LOADER_ID = 0;
 
     public static MainActivity Instance() {
         return inst;
@@ -49,10 +47,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-        smsListView = findViewById(R.id.lv_messages);
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, SmsMessageList);
-        smsListView.setAdapter(arrayAdapter);
-        smsListView.setOnItemClickListener(this);
+        mMessagesRecyclerView = findViewById(R.id.rv_messages);
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mMessagesRecyclerView.setLayoutManager(mLayoutManager);
+
+        mMessagesRecyclerView.setHasFixedSize(true);
+
+        mAdapter = new SmsAdapter(this, new ArrayList<Sms>());
+        mMessagesRecyclerView.setAdapter(mAdapter);
 
         SmsInbox();
     }
@@ -64,48 +66,40 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void SmsInbox() {
-        ContentResolver contentResolver = getContentResolver();
-        Cursor smsInboxCursor = contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
+        mAdapter.setData(null);
+        mAdapter.setData(Inbox.populateInbox(this));
+    }
 
-        int indexBody = smsInboxCursor.getColumnIndex("body");
-        int indexAddress = smsInboxCursor.getColumnIndex("address");
-        int timeMills = smsInboxCursor.getColumnIndex("date");
-
+    private String setDate(int timeMills) {
         Date date = new Date(timeMills);
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
-        String dateText = format.format(date);
-
-        if (indexBody < 0 || !smsInboxCursor.moveToFirst()) return;
-
-        arrayAdapter.clear();
-        do {
-            String str = smsInboxCursor.getString(indexAddress) + "\n" +
-                    smsInboxCursor.getString(indexBody) + "\t" + dateText + "\n";
-            arrayAdapter.add(str);
-        } while (smsInboxCursor.moveToNext());
+        return format.format(date);
     }
 
     public void updateList(final String smsMessage) {
-        arrayAdapter.insert(smsMessage, 0);
-        arrayAdapter.notifyDataSetChanged();
+//        arrayAdapter.insert(smsMessage, 0);
+//        arrayAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        try {
-            String[] smsMessages = SmsMessageList.get(position).split("\n");
-            String address = smsMessages[0];
-            String smsMessage = "";
 
-            for (int j = 0; j <= smsMessages.length; j++) {
-                smsMessage += smsMessages;
-            }
+//    @Override
+//    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//        try {
+//            String[] smsMessages = SmsMessageList.get(position).split("\n");
+//            String address = smsMessages[0];
+//            String smsMessage = "";
+//
+//            for (int j = 0; j <= smsMessages.length; j++) {
+//                smsMessage += smsMessages;
+//            }
+//
+//            String smsMessageStr = address + "\n";
+//            smsMessageStr += smsMessage;
+//            Toast.makeText(this, smsMessageStr, Toast.LENGTH_LONG).show();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-            String smsMessageStr = address + "\n";
-            smsMessageStr += smsMessage;
-            Toast.makeText(this, smsMessageStr, Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 }

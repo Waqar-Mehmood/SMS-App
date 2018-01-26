@@ -4,12 +4,12 @@ public class Sms {
 
     private String mMessage;
     private String mDate;
-    private String mSentBy;
+    private String mSenderPhoneNumber;
 
-    public Sms(String mMessage, String mDate, String mSentBy) {
+    public Sms(String senderPhoneNumber, String mMessage, String mDate) {
         this.mMessage = mMessage;
         this.mDate = mDate;
-        this.mSentBy = mSentBy;
+        this.mSenderPhoneNumber = senderPhoneNumber;
     }
 
     public String getmMessage() {
@@ -20,7 +20,7 @@ public class Sms {
         return mDate;
     }
 
-    public String getmSentBy() {
-        return mSentBy;
+    public String getmSenderPhoneNumber() {
+        return mSenderPhoneNumber;
     }
 }
