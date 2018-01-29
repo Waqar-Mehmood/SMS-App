@@ -1,15 +1,15 @@
 package com.sistonic.messenger;
 
-public class Sms {
+public class SMS {
 
     private String mMessage;
     private String mDate;
     private String mSenderPhoneNumber;
 
-    public Sms(String senderPhoneNumber, String mMessage, String mDate) {
+    public SMS(String mSenderPhoneNumber, String mMessage, String mDate) {
         this.mMessage = mMessage;
         this.mDate = mDate;
-        this.mSenderPhoneNumber = senderPhoneNumber;
+        this.mSenderPhoneNumber = mSenderPhoneNumber;
     }
 
     public String getmMessage() {

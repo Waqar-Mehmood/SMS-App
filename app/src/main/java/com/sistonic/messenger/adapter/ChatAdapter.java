@@ -1,7 +1,6 @@
-package com.sistonic.messenger;
+package com.sistonic.messenger.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.sistonic.messenger.R;
+import com.sistonic.messenger.SMS;
+
 import java.util.List;
 
-public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.ViewHolder> {
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<Sms> mSmsList;
+    private List<SMS> mSmsList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -29,13 +31,14 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.ViewHolder> {
 
             mSenderPhoneNumber = itemView.findViewById(R.id.tv_sender_phone_number);
             mMessage = itemView.findViewById(R.id.tv_message);
+            mMessage.setMaxLines(10);
             mTime = itemView.findViewById(R.id.tv_time);
 
             mCardView = itemView.findViewById(R.id.card_view);
         }
     }
 
-    public SmsAdapter(Context context, List<Sms> list) {
+    public ChatAdapter(Context context, List<SMS> list) {
         mContext = context;
         mSmsList = list;
     }
@@ -51,22 +54,11 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Sms sms = mSmsList.get(position);
+        final SMS sms = mSmsList.get(position);
 
         holder.mSenderPhoneNumber.setText(sms.getmSenderPhoneNumber());
         holder.mMessage.setText(sms.getmMessage());
         holder.mTime.setText(sms.getmDate());
-
-        holder.mCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, SendSMSActivity.class);
-
-                intent.putExtra("PhoneNumber", sms.getmSenderPhoneNumber());
-
-                mContext.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -76,7 +68,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.ViewHolder> {
         return mSmsList.size();
     }
 
-    public void setData(List<Sms> list) {
+    public void setData(List<SMS> list) {
         mSmsList = list;
         notifyDataSetChanged();
     }

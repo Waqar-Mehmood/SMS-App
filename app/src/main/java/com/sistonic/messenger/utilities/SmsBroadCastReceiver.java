@@ -14,21 +14,20 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsMessage;
-import android.widget.Toast;
 
 import com.sistonic.messenger.MainActivity;
 import com.sistonic.messenger.R;
+import com.sistonic.messenger.SendSMSActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class SmsBroadCastReceiver extends BroadcastReceiver {
 
     public static final String SMS_BUNDLE = "pdus";
 
-    String smsBody;
-    String address;
+    String mSmsBody;
+    String mSenderPhoneNumber;
     long timeMills;
     private TextToSpeech textToSpeech;
 
@@ -48,16 +47,16 @@ public class SmsBroadCastReceiver extends BroadcastReceiver {
                     smsMessage = SmsMessage.createFromPdu((byte[]) sm);
                 }
 
-                smsBody = smsMessage.getMessageBody();
-                address = smsMessage.getOriginatingAddress();
+                mSmsBody = smsMessage.getMessageBody();
+                mSenderPhoneNumber = smsMessage.getOriginatingAddress();
                 timeMills = smsMessage.getTimestampMillis();
 
                 Date date = new Date(timeMills);
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
                 String dateText = format.format(date);
 
-                smsMessageStr = address + "\n" +
-                        smsBody + "\t" + dateText;
+                smsMessageStr = mSenderPhoneNumber + "\n" +
+                        mSmsBody + "\t" + dateText;
             }
 
             MainActivity inst = MainActivity.Instance();
@@ -65,10 +64,10 @@ public class SmsBroadCastReceiver extends BroadcastReceiver {
             NotificationCompat.Builder notification_Bldr = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.ic_sms_black_24dp)
                     .setLargeIcon(largeIcon(context))
-                    .setContentTitle(address)
-                    .setContentText(smsBody)
+                    .setContentTitle(mSenderPhoneNumber)
+                    .setContentText(mSmsBody)
                     .setDefaults(Notification.DEFAULT_SOUND)
-                    .setContentIntent(pendContentIntent(context))
+                    .setContentIntent(pendContentIntent(context, mSenderPhoneNumber))
                     .setAutoCancel(true);
             notification_Bldr.build();
 
@@ -88,8 +87,9 @@ public class SmsBroadCastReceiver extends BroadcastReceiver {
     }
 
     //for showing the pending notifications
-    private static PendingIntent pendContentIntent(Context context) {
-        Intent startActivityIntent = new Intent(context, MainActivity.class);
+    private static PendingIntent pendContentIntent(Context context, String senderPhoneNumber) {
+        Intent startActivityIntent = new Intent(context, SendSMSActivity.class);
+        startActivityIntent.putExtra("PhoneNumber", senderPhoneNumber);
         return PendingIntent.getActivity(
                 context,
                 1122,

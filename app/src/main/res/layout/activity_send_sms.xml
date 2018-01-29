@@ -8,50 +8,67 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <EditText
-        android:id="@+id/et_phone_number"
+    <RelativeLayout
+        android:id="@+id/rl_phone_number"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#FFF"
-        android:hint="Phone Number"
-        android:inputType="phone"
-        android:maxLines="1"
-        android:textColor="#333333"
-        android:textSize="16sp" />
+        android:layout_height="wrap_content"
+        android:background="#FFF">
+
+        <EditText
+            android:id="@+id/et_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_messages_1"
         android:layout_width="match_parent"
         android:layout_height="380dp"
-        android:layout_below="@+id/et_phone_number"
+        android:layout_below="@+id/rl_phone_number"
         android:layout_marginTop="10dp"
         android:background="#FFF"
-        android:padding="6dp"
         app:stackFromEnd="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
         android:background="#FFF"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="10">
 
-        <EditText
-            android:id="@+id/et_sms"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="7.5"
-            android:hint="Enter message"
-            android:inputType="textMultiLine" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/colorPrimary" />
 
-        <Button
-            android:id="@+id/btn_send_sms"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2.5"
-            android:text="Send" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_sms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7.5"
+                android:hint="Enter message"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/btn_send_sms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5"
+                android:text="Send" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

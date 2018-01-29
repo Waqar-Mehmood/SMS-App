@@ -44,7 +44,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="8.5"
                     android:fontFamily="sans-serif"
-                    android:maxLines="1"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     tools:text="Hello World!" />

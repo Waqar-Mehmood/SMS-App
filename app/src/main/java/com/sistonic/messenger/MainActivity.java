@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.sistonic.messenger.adapter.InboxAdapter;
 import com.sistonic.messenger.data.Inbox;
 
 import java.text.SimpleDateFormat;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static MainActivity inst;
 
-    private SmsAdapter mAdapter;
+    private InboxAdapter mAdapter;
 
     private RecyclerView mMessagesRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         mMessagesRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new SmsAdapter(this, new ArrayList<Sms>());
+        mAdapter = new InboxAdapter(this, new ArrayList<SMS>());
         mMessagesRecyclerView.setAdapter(mAdapter);
 
         SmsInbox();
