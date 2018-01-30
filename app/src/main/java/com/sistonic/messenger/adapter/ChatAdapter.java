@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.sistonic.messenger.R;
 import com.sistonic.messenger.SMS;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
@@ -20,7 +22,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView mSenderPhoneNumber;
         TextView mMessage;
         TextView mTime;
 
@@ -29,9 +30,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mSenderPhoneNumber = itemView.findViewById(R.id.tv_sender_phone_number);
             mMessage = itemView.findViewById(R.id.tv_message);
-            mMessage.setMaxLines(10);
             mTime = itemView.findViewById(R.id.tv_time);
 
             mCardView = itemView.findViewById(R.id.card_view);
@@ -47,7 +46,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.messages_list_item, parent, false);
+                .inflate(R.layout.chat_list_item, parent, false);
         // set the view's size, margins, paddings and layout parameters
         return new ViewHolder(view);
     }
@@ -56,9 +55,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         final SMS sms = mSmsList.get(position);
 
-        holder.mSenderPhoneNumber.setText(sms.getmSenderPhoneNumber());
         holder.mMessage.setText(sms.getmMessage());
-        holder.mTime.setText(sms.getmDate());
+        holder.mTime.setText(setDate(sms.getmDate()));
     }
 
     @Override
@@ -71,5 +69,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void setData(List<SMS> list) {
         mSmsList = list;
         notifyDataSetChanged();
+    }
+
+    private static String setDate(long timeMills) {
+        Date date = new Date(timeMills);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+
+        String time = dateFormat.format(date) + " " + timeFormat.format(date);
+
+        return time;
     }
 }

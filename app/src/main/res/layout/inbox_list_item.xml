@@ -28,8 +28,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:textColor="#333333"
-                android:textSize="14sp"
-                android:textStyle="bold"
+                android:textSize="16sp"
                 tools:text="+923425297771" />
 
             <LinearLayout
@@ -44,6 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="8.5"
                     android:fontFamily="sans-serif"
+                    android:maxLines="1"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     tools:text="Hello World!" />

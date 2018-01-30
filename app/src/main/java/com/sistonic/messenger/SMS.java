@@ -3,10 +3,10 @@ package com.sistonic.messenger;
 public class SMS {
 
     private String mMessage;
-    private String mDate;
+    private long mDate;
     private String mSenderPhoneNumber;
 
-    public SMS(String mSenderPhoneNumber, String mMessage, String mDate) {
+    public SMS(String mSenderPhoneNumber, String mMessage, long mDate) {
         this.mMessage = mMessage;
         this.mDate = mDate;
         this.mSenderPhoneNumber = mSenderPhoneNumber;
@@ -16,7 +16,7 @@ public class SMS {
         return mMessage;
     }
 
-    public String getmDate() {
+    public long getmDate() {
         return mDate;
     }
 

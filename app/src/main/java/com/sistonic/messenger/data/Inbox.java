@@ -1,10 +1,8 @@
 package com.sistonic.messenger.data;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import com.sistonic.messenger.SMS;
 
@@ -14,34 +12,33 @@ import java.util.List;
 public class Inbox {
 
     public static final String COLUMN_PERSON = "person";
+    public static final String COLUMN_ID = "_id";
     public static final String COLUMN_ADDRESS = "address";
     public static final String COLUMN_BODY = "body";
     public static final String COLUMN_DATE = "date";
 
-    private static Cursor contentSmsInbox(Context context) {
-        ContentResolver contentResolver = context.getContentResolver();
-        Cursor smsInboxCursor = contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
-        return smsInboxCursor;
-    }
-
     public static List<SMS> populateInbox(Context context) {
 
-        Cursor cursor = contentSmsInbox(context);
+        // Create Inbox box URI
+        Uri inboxURI = Uri.parse("content://sms/inbox");
 
-        int indexBody = cursor.getColumnIndex(COLUMN_BODY);
-        int indexAddress = cursor.getColumnIndex(COLUMN_ADDRESS);
-        int timeMills = cursor.getColumnIndex(COLUMN_DATE);
+        // List required columns
+        String[] reqCols = new String[]{COLUMN_ID, COLUMN_ADDRESS, COLUMN_BODY, COLUMN_DATE};
 
-        if (indexBody < 0 || !cursor.moveToFirst()) return null;
+        // Fetch Inbox SMS Message from Built-in Content Provider
+        Cursor cursor = context.getContentResolver()
+                .query(inboxURI, reqCols, null, null, null);
+
+        if (cursor.getCount() < 1 || !cursor.moveToFirst()) return null;
 
         List<SMS> list = new ArrayList<>();
 
         do {
-            String senderPhone = cursor.getString(indexAddress);
-            String messageBody = cursor.getString(indexBody);
-//            String messageDate = setDate(smsInboxCursor.getColumnIndex("date"));
+            String senderPhone = cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS));
+            String messageBody = cursor.getString(cursor.getColumnIndex(COLUMN_BODY));
+            long messageDate = cursor.getLong(cursor.getColumnIndex(COLUMN_DATE));
 
-            SMS sms = new SMS(senderPhone, messageBody, "00-00");
+            SMS sms = new SMS(senderPhone, messageBody, messageDate);
             list.add(sms);
 
         } while (cursor.moveToNext());
@@ -72,55 +69,40 @@ public class Inbox {
             e.printStackTrace();
         }
 
+        cursor.close();
         return newList;
     }
 
     public static List<SMS> filterNumber(Context context, String phoneNumber) {
 
-        Cursor cursor = contentSmsInbox(context);
+        // Create Inbox box URI
+        Uri inboxURI = Uri.parse("content://sms/inbox");
 
-        int indexBody = cursor.getColumnIndex("body");
-        int indexAddress = cursor.getColumnIndex("address");
-        int timeMills = cursor.getColumnIndex("date");
+        // List required columns
+        String[] reqCols = new String[]{COLUMN_ID, COLUMN_ADDRESS, COLUMN_BODY, COLUMN_DATE};
 
-        String person = cursor.getString(cursor.getColumnIndexOrThrow("person"));
+        String selection = COLUMN_ADDRESS + "=?";
+        String[] selectionArgs = {phoneNumber};
 
-        if (indexBody < 0 || !cursor.moveToFirst()) return null;
+        // Fetch Inbox SMS Message from Built-in Content Provider
+        Cursor cursor = context.getContentResolver()
+                .query(inboxURI, reqCols, selection, selectionArgs, null);
+
+        if (cursor.getCount() < 1 || !cursor.moveToFirst()) return null;
 
         List<SMS> list = new ArrayList<>();
 
         do {
-            String senderPhone = cursor.getString(indexAddress);
-            String messageBody = cursor.getString(indexBody);
-//            String messageDate = setDate(smsInboxCursor.getColumnIndex("date"));
+            String senderPhone = cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS));
+            String messageBody = cursor.getString(cursor.getColumnIndex(COLUMN_BODY));
+            long messageDate = cursor.getLong(cursor.getColumnIndex(COLUMN_DATE));
 
-            SMS sms = new SMS(senderPhone, messageBody, "00-00");
+            SMS sms = new SMS(senderPhone, messageBody, messageDate);
             list.add(sms);
 
         } while (cursor.moveToNext());
 
-        List<SMS> newList = new ArrayList<>();
-
-        Log.d("messageApp", "List size " + list.size());
-
-        try {
-            for (int i = 0; i < list.size(); i++) {
-
-                SMS sms = list.get(i);
-
-//                Log.d("messageApp", "value of i " + i + ", sms1 " + sms1.getmSenderPhoneNumber());
-
-                if (sms.getmSenderPhoneNumber().equals(phoneNumber)) {
-                    newList.add(sms);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d("messageApp", "Error");
-        }
-
-        Log.d("messageApp", "new List Size " + newList.size());
-
-        return newList;
+        cursor.close();
+        return list;
     }
 }

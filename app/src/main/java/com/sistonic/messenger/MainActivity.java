@@ -12,9 +12,7 @@ import android.view.View;
 import com.sistonic.messenger.adapter.InboxAdapter;
 import com.sistonic.messenger.data.Inbox;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,12 +67,6 @@ public class MainActivity extends AppCompatActivity {
     public void SmsInbox() {
         mAdapter.setData(null);
         mAdapter.setData(Inbox.populateInbox(this));
-    }
-
-    private String setDate(int timeMills) {
-        Date date = new Date(timeMills);
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
-        return format.format(date);
     }
 
     public void updateList(final String smsMessage) {

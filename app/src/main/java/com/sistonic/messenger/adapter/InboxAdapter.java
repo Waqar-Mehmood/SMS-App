@@ -13,6 +13,8 @@ import com.sistonic.messenger.R;
 import com.sistonic.messenger.SendSMSActivity;
 import com.sistonic.messenger.SMS;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
@@ -33,7 +35,6 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
 
             mSenderPhoneNumber = itemView.findViewById(R.id.tv_sender_phone_number);
             mMessage = itemView.findViewById(R.id.tv_message);
-            mMessage.setMaxLines(1);
             mTime = itemView.findViewById(R.id.tv_time);
 
             mCardView = itemView.findViewById(R.id.card_view);
@@ -49,7 +50,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.messages_list_item, parent, false);
+                .inflate(R.layout.inbox_list_item, parent, false);
         // set the view's size, margins, paddings and layout parameters
         return new ViewHolder(view);
     }
@@ -60,7 +61,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
 
         holder.mSenderPhoneNumber.setText(sms.getmSenderPhoneNumber());
         holder.mMessage.setText(sms.getmMessage());
-        holder.mTime.setText(sms.getmDate());
+        holder.mTime.setText(setDate(sms.getmDate()));
 
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,5 +85,13 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     public void setData(List<SMS> list) {
         mSmsList = list;
         notifyDataSetChanged();
+    }
+
+    private static String setDate(long timeMills) {
+        Date date = new Date(timeMills);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+
+        return dateFormat.format(date);
     }
 }
