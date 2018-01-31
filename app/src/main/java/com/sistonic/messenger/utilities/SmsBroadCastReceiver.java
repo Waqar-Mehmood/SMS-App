@@ -17,7 +17,7 @@ import android.telephony.SmsMessage;
 
 import com.sistonic.messenger.MainActivity;
 import com.sistonic.messenger.R;
-import com.sistonic.messenger.SendSMSActivity;
+import com.sistonic.messenger.ChatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -88,7 +88,7 @@ public class SmsBroadCastReceiver extends BroadcastReceiver {
 
     //for showing the pending notifications
     private static PendingIntent pendContentIntent(Context context, String senderPhoneNumber) {
-        Intent startActivityIntent = new Intent(context, SendSMSActivity.class);
+        Intent startActivityIntent = new Intent(context, ChatActivity.class);
         startActivityIntent.putExtra("PhoneNumber", senderPhoneNumber);
         return PendingIntent.getActivity(
                 context,
@@ -97,20 +97,10 @@ public class SmsBroadCastReceiver extends BroadcastReceiver {
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    // largeIcon is used for person image with notication message
+    // largeIcon is used for person image with notification message
     private static Bitmap largeIcon(Context context) {
         Resources res = context.getResources();
         Bitmap largeIcon = BitmapFactory.decodeResource(res, R.mipmap.ic_launcher);
         return largeIcon;
     }
-
-//    public void speakOut() {
-//        if (result != tts.setLanguage(Locale.ENGLISH)) {
-//            Toast.makeText(getApplicationContext(), "Enter right Words...... ", Toast.LENGTH_LONG).show();
-//        } else {
-//            Toast.makeText(getApplicationContext(), "Speak", Toast.LENGTH_LONG).show();
-//            //speak given text
-//            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-//        }
-//    }
 }

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">SMS App</string>
     <string name="title_activity_main">Messaging</string>
+    <string name="to">To</string>
+    <string name="enter_message">Enter message</string>
+    <string name="send">Send</string>
 </resources>

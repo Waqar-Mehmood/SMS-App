@@ -1,8 +1,5 @@
 package com.sistonic.messenger.adapter;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sistonic.messenger.R;
-import com.sistonic.messenger.SendSMSActivity;
 import com.sistonic.messenger.SMS;
 
 import java.text.SimpleDateFormat;
@@ -19,31 +15,41 @@ import java.util.List;
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
 
-    private Context mContext;
     private List<SMS> mSmsList;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    private final InboxAdapterOnItemClickListener mClickHandler;
 
-        TextView mSenderPhoneNumber;
+    public interface InboxAdapterOnItemClickListener {
+        void onItemClickListener(String phoneNumber);
+    }
+
+    public InboxAdapter(InboxAdapterOnItemClickListener clickHandler, List<SMS> list) {
+        mClickHandler = clickHandler;
+        mSmsList = list;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        TextView mName;
         TextView mMessage;
         TextView mTime;
-
-        CardView mCardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mSenderPhoneNumber = itemView.findViewById(R.id.tv_sender_phone_number);
+            mName = itemView.findViewById(R.id.tv_sender_name);
             mMessage = itemView.findViewById(R.id.tv_message);
             mTime = itemView.findViewById(R.id.tv_time);
 
-            mCardView = itemView.findViewById(R.id.card_view);
+            itemView.setOnClickListener(this);
         }
-    }
 
-    public InboxAdapter(Context context, List<SMS> list) {
-        mContext = context;
-        mSmsList = list;
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            SMS sms = mSmsList.get(adapterPosition);
+            mClickHandler.onItemClickListener(sms.getmSenderPhoneNumber());
+        }
     }
 
     @Override
@@ -59,20 +65,14 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         final SMS sms = mSmsList.get(position);
 
-        holder.mSenderPhoneNumber.setText(sms.getmSenderPhoneNumber());
+        String name = sms.getmName();
+        if (name == null) {
+            name = sms.getmSenderPhoneNumber();
+        }
+
+        holder.mName.setText(name);
         holder.mMessage.setText(sms.getmMessage());
         holder.mTime.setText(setDate(sms.getmDate()));
-
-        holder.mCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, SendSMSActivity.class);
-
-                intent.putExtra("PhoneNumber", sms.getmSenderPhoneNumber());
-
-                mContext.startActivity(intent);
-            }
-        });
     }
 
     @Override

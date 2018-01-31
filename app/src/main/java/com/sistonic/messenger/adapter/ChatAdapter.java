@@ -1,11 +1,11 @@
 package com.sistonic.messenger.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sistonic.messenger.R;
@@ -17,13 +17,24 @@ import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
-    private Context mContext;
     private List<SMS> mSmsList;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    private final ChatAdapterOnItemClickListener mClickHandler;
+
+    public interface ChatAdapterOnItemClickListener {
+        void onItemClickListener(SMS sms);
+    }
+
+    public ChatAdapter(ChatAdapterOnItemClickListener clickHandler, List<SMS> list) {
+        mClickHandler = clickHandler;
+        mSmsList = list;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView mMessage;
         TextView mTime;
+        ImageView mPlayMessage;
 
         CardView mCardView;
 
@@ -32,14 +43,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
             mMessage = itemView.findViewById(R.id.tv_message);
             mTime = itemView.findViewById(R.id.tv_time);
-
+            mPlayMessage = itemView.findViewById(R.id.iv_play_message);
             mCardView = itemView.findViewById(R.id.card_view);
-        }
-    }
 
-    public ChatAdapter(Context context, List<SMS> list) {
-        mContext = context;
-        mSmsList = list;
+            mPlayMessage.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int adapterPosition = getAdapterPosition();
+            SMS sms = mSmsList.get(adapterPosition);
+            mClickHandler.onItemClickListener(sms);
+        }
     }
 
     @Override
@@ -53,8 +68,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final SMS sms = mSmsList.get(position);
-
+        SMS sms = mSmsList.get(position);
         holder.mMessage.setText(sms.getmMessage());
         holder.mTime.setText(setDate(sms.getmDate()));
     }
